@@ -1,11 +1,16 @@
-/** Returns LCS of two strings
+/** Returns Longest Common Subsequence of two strings
  *  
  * @param a,b strings
  * @return lcs LCS of a and b or empty string  
  *  		   if either is empty
  */
  
-
+/* Optimal Substructue:
+ (i) If first/last two characters of strings are matched.
+ 	e.g L(“AGGTAB”, “GXTXAYB”) = 1 + L(“AGGTA”, “GXTXAY”) 
+ (ii) If first/last two characters of strings are not matched.
+ 	e.g. L(“ABCDGH”, “AEDFHR”) = MAX ( L(“ABCDG”, “AEDFHR”), L(“ABCDGH”, “AEDFH”) )
+ */
 string lcs(string &a, string &b){
 	int a_size = a.size(), b_size = b.size();
 	
@@ -75,4 +80,34 @@ int lcs(string &a, string &b) {
       	}
       }
   return dp[a.size() % 2][b.size()];
+}
+
+// LCS of three strings
+
+int lcsOf3( string X, string Y, string Z, int m,
+                               int n, int o)
+{
+    int L[m+1][n+1][o+1];
+ 
+    for (int i=0; i<=m; i++)
+    {
+        for (int j=0; j<=n; j++)
+        {
+            for (int k=0; k<=o; k++)
+            {
+                if (i == 0 || j == 0||k==0)
+                    L[i][j][k] = 0;
+ 
+                else if (X[i-1] == Y[j-1] && X[i-1]==Z[k-1])
+                    L[i][j][k] = L[i-1][j-1][k-1] + 1;
+ 
+                else
+                    L[i][j][k] = max(max(L[i-1][j][k],
+                                         L[i][j-1][k]),
+                                     L[i][j][k-1]);
+            }
+        }
+    }
+ 
+    return L[m][n][o];
 }
